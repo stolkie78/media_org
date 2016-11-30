@@ -2,10 +2,8 @@
 # Exiftool Image en Video renamer
 
 ET=/bin/exiftool
-#IMGDEST="/volume1/photo/Library" 
-#VIDDEST="/volume1/video/HomeVideos" 
-IMGDEST="/volume1/scripts/media_org/photo" 
-VIDDEST="/volume1/scripts/media_org/movie" 
+IMGDEST="/volume1/photo/Library" 
+VIDDEST="/volume1/video/HomeVideos" 
 
 function help {
 	echo "HEEELP" 
