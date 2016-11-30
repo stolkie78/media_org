@@ -1,9 +1,11 @@
 #/bin/bash
 # Exiftool Image en Video renamer
 
-ET=/root/bin/exiftool
-IMGDEST="/volume1/photo/Library" 
-VIDDEST="/volume1/video/HomeVideos" 
+ET=/bin/exiftool
+#IMGDEST="/volume1/photo/Library" 
+#VIDDEST="/volume1/video/HomeVideos" 
+IMGDEST="/volume1/scripts/media_org/photo" 
+VIDDEST="/volume1/scripts/media_org/movie" 
 
 function help {
 	echo "HEEELP" 
@@ -13,15 +15,15 @@ function help {
 function move_images { 
 	echo "- Location: ${MEDIASOURCE}" 
 	echo "- Processing Images - Pass 1: CreateDate" 
-	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%%-c.%%e "-filename<CreateDate" -ext JPG "${MEDIASOURCE}"
+	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%S%%-c.%%e "-filename<CreateDate" -ext JPG "${MEDIASOURCE}"
 	echo "- Processing Images - Pass 2: FileModifyDate"
-	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%%-c.%%e "-filename<FileModifyDate" -ext JPG "${MEDIASOURCE}"
+	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%S%%-c.%%e "-filename<FileModifyDate" -ext JPG "${MEDIASOURCE}"
 }
 
 function move_movies { 
 	echo "- Location: ${MEDIASOURCE}" 
 	echo "- Processing Video"
-	${ET} -r -d ${VIDDEST}/Video-%Y%m%d%H%M%%-c.%%e "-filename<CreateDate" -ext MP4 "${MEDIASOURCE}" 
+	${ET} -r -d ${VIDDEST}/Video-%Y%m%d%H%M%S%%-c.%%e "-filename<CreateDate" -ext MP4 "${MEDIASOURCE}" 
 }
 
 function fix_perm {
@@ -31,6 +33,11 @@ function fix_perm {
 	chmod -R 777 "${IMGDEST}" 
 	chmod -R 777 "${VIDDEST}"
 }
+
+function remove_ea {
+	find "${MEDIASOURCE}" -name "@eaDir"  -type d -exec rm -rf {} \; 
+}
+
 
 while getopts d: OPT
 	do
@@ -44,6 +51,7 @@ while getopts d: OPT
 
 test -z "${MEDIASOURCE}" && help
 
+remove_ea
 move_images
 move_movies
 
