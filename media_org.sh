@@ -4,6 +4,8 @@
 ET=/bin/exiftool
 IMGDEST="/volume1/photo/Library" 
 VIDDEST="/volume1/video/HomeVideos" 
+MEDIASOURCE="/volume1/process/media"
+RUNSTAMP="$(date +%Y%m%d%H%M%S)"
 
 function help {
 	echo "HEEELP" 
@@ -37,20 +39,24 @@ function remove_crap {
 	find "${MEDIASOURCE}" -name "FB_IMG*"  -type f -exec rm -rf {} \; 
 }
 
+function endgame {
+	mkdir -p "${MEDIASOURCE}.done/${RUNSTAMP}"
+	mv "${MEDIASOURCE}/*" "${MEDIASOURCE}.done/${RUNSTAMP}"
+}
 
-while getopts d: OPT
-	do
-		case "${OPT}" in
-			d) MEDIASOURCE="${OPTARG}"
-			;;
-			*) help
-			;;
-		esac
-	done
-
-test -z "${MEDIASOURCE}" && help
+#while getopts d: OPT
+#	do
+#		case "${OPT}" in
+#			d) MEDIASOURCE="${OPTARG}"
+#			;;
+#			*) help
+#			;;
+#		esac
+#	done
+#
+#test -z "${MEDIASOURCE}" && help
 
 remove_crap
 move_images
 move_movies
-
+end_game
