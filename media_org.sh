@@ -26,14 +26,15 @@ function move_movies {
 
 function fix_perm {
 	echo "- Fixing permissions" 
-	chown -R giedo:stolkdata "${IMGDEST}" 
-	chown -R giedo:stolkdata "${VIDDEST}" 
-	chmod -R 777 "${IMGDEST}" 
-	chmod -R 777 "${VIDDEST}"
+	chgrp -R stolkdata "${IMGDEST}" 
+	chgrp -R stolkdata "${VIDDEST}" 
+	chmod -R 755 "${IMGDEST}"
+	chmod -R 755 "${VIDDEST}"
 }
 
-function remove_ea {
+function remove_crap {
 	find "${MEDIASOURCE}" -name "@eaDir"  -type d -exec rm -rf {} \; 
+	find "${MEDIASOURCE}" -name "FB_IMG*"  -type f -exec rm -rf {} \; 
 }
 
 
@@ -49,7 +50,7 @@ while getopts d: OPT
 
 test -z "${MEDIASOURCE}" && help
 
-remove_ea
+remove_crap
 move_images
 move_movies
 
