@@ -36,12 +36,15 @@ function fix_perm {
 
 function remove_crap {
 	find "${MEDIASOURCE}" -name "@eaDir"  -type d -exec rm -rf {} \; 
+	find "${MEDIASOURCE}" -name ".picasaoriginals" -type d -exec rm -rf {} \; 
+	find "${MEDIASOURCE}" -name ".picasa.ini" -type f -exec rm -rf {} \; 
 	find "${MEDIASOURCE}" -name "FB_IMG*"  -type f -exec rm -rf {} \; 
 }
 
-function endgame {
+function end_game {
 	mkdir -p "${MEDIASOURCE}.done/${RUNSTAMP}"
-	mv "${MEDIASOURCE}/*" "${MEDIASOURCE}.done/${RUNSTAMP}"
+	rsync -av ${MEDIASOURCE}/. ${MEDIASOURCE}.done/${RUNSTAMP}
+	rm -rf ${MEDIASOURCE}/*
 }
 
 #while getopts d: OPT
@@ -56,7 +59,7 @@ function endgame {
 #
 #test -z "${MEDIASOURCE}" && help
 
-remove_crap
+remove_crap >/dev/null 2>&1
 move_images
 move_movies
 end_game
