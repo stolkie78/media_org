@@ -14,10 +14,14 @@ function help {
 
 function move_images { 
 	echo "- Location: ${MEDIASOURCE}" 
-	echo "- Processing Images - Pass 1: CreateDate" 
+	echo "- Processing Images - Pass 1:JPG CreateDate" 
 	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%S%%-c.%%e "-filename<CreateDate" -ext JPG "${MEDIASOURCE}"
-	echo "- Processing Images - Pass 2: FileModifyDate"
+	echo "- Processing Images - Pass 2:JPG FileModifyDate"
 	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%S%%-c.%%e "-filename<FileModifyDate" -ext JPG "${MEDIASOURCE}"
+	echo "- Processing Images - Pass 3:CR2 CreateDate" 
+	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%S%%-c.%%e "-filename<CreateDate" -ext CR2 "${MEDIASOURCE}"
+	echo "- Processing Images - Pass 4:CR2 FileModifyDate"
+	${ET} -r -d ${IMGDEST}/%Y/%Y%m%d/Image-%Y%m%d%H%M%S%%-c.%%e "-filename<FileModifyDate" -ext CR2 "${MEDIASOURCE}"
 }
 
 function move_movies { 
@@ -38,6 +42,7 @@ function remove_crap {
 	find "${MEDIASOURCE}" -name "@eaDir"  -type d -exec rm -rf {} \; 
 	find "${MEDIASOURCE}" -name ".picasaoriginals" -type d -exec rm -rf {} \; 
 	find "${MEDIASOURCE}" -name ".picasa.ini" -type f -exec rm -rf {} \; 
+	find "${MEDIASOURCE}" -iname "thumbs.db" -type f -exec rm -rf {} \; 
 	find "${MEDIASOURCE}" -name "FB_IMG*"  -type f -exec rm -rf {} \; 
 }
 
